@@ -1,4 +1,9 @@
+const HttpError = require('../services/HttpError');
+
 function errorHandler(error, _req, res, _next) {
+  if (error instanceof HttpError) {
+    return res.status(error.status).json({ message: error.message });
+  }
   if (error.type === 'entity.parse.failed') {
     return res.status(400).json({ message: 'JSON inválido.' });
   }
