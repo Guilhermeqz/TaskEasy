@@ -39,7 +39,7 @@ async function fixture(t) {
   async function login(email = 'demo@taskeasy.com', password = 'TaskEasy@123') {
     return request('/auth/login', { method: 'POST', body: { email, password } });
   }
-  return { db, filename, secret, request, login };
+  return { db, filename, secret, request, login, baseUrl: `http://127.0.0.1:${server.address().port}` };
 }
 
 module.exports = { fixture };
