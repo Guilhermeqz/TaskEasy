@@ -5,6 +5,7 @@ node_modules/
 .expo/
 dist/
 coverage/
+/backups/
 *.log
 *.db
 *.db-*
