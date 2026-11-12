@@ -1,0 +1,104 @@
+name: Gerar APK Android
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_url:
+        description: URL da API (HTTPS do Render ou HTTP do computador para teste no mesmo Wi-Fi)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Compilar APK independente
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: mobile
+        shell: bash
+    env:
+      CI: 'true'
+      EXPO_PUBLIC_API_URL: ${{ inputs.api_url }}
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20.20.0'
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+
+      - name: Configurar Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Configurar Android SDK
+        uses: android-actions/setup-android@v4
+
+      - name: Instalar ferramentas Android do SDK 57
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0" "ndk;27.1.12297006" "cmake;3.22.1"
+
+      - name: Validar a URL pública da API
+        run: |
+          node <<'NODE'
+          const url = new URL(process.env.EXPO_PUBLIC_API_URL);
+          if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.hash || url.search) {
+            throw new Error('Informe somente a URL pública HTTP/HTTPS da API, sem credenciais, query ou fragmento.');
+          }
+          if (['localhost', '127.0.0.1', '0.0.0.0', '::1', '[::1]'].includes(url.hostname)) {
+            throw new Error('No APK, use o IP do computador ou a URL do Render, sem localhost.');
+          }
+          console.log('URL da API validada.');
+          NODE
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Testar o aplicativo
+        run: npm test
+
+      - name: Verificar dependências do Expo
+        run: npx expo install --check
+
+      - name: Gerar projeto Android com o módulo de despertador
+        run: npx expo prebuild --platform android --no-install
+
+      - name: Compilar APK de teste para celulares ARM 32 e 64 bits
+        working-directory: mobile/android
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:assembleRelease --no-daemon --max-workers=2 \
+            -PreactNativeArchitectures=armeabi-v7a,arm64-v8a \
+            '-Dorg.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m'
+
+      - name: Preparar APK e checksum
+        working-directory: .
+        run: |
+          mkdir -p artifacts
+          cp mobile/android/app/build/outputs/apk/release/app-release.apk artifacts/TaskEasy.apk
+          cd artifacts
+          sha256sum TaskEasy.apk > TaskEasy.apk.sha256
+
+      - name: Disponibilizar APK para download
+        uses: actions/upload-artifact@v7
+        with:
+          name: TaskEasy-APK-${{ github.run_number }}
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0

@@ -263,6 +263,8 @@ O mobile consulta `https://zenquotes.io/api/today` diretamente, sem enviar crede
 
 ## Testes e validação
 
+Para gerar um APK instalável sem conta Expo/EAS, use o [workflow do GitHub Actions](docs/APK-GITHUB.md). A compilação nativa precisa terminar com sucesso e o despertador deve ser validado no Android físico.
+
 Na raiz:
 
 ```powershell

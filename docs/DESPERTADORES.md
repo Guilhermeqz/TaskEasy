@@ -53,7 +53,11 @@ A data é calculada pelo celular, pois o fuso do servidor pode ser diferente. O 
 
 Editar apenas o texto não rearma automaticamente um alarme único que já passou. Para tocá-lo novamente, use **Reagendar no próximo horário**, altere o horário ou reabra uma tarefa concluída.
 
-## Gerar o APK pela Expo/EAS
+## Gerar o APK pelo GitHub (sem conta Expo)
+
+O workflow `.github/workflows/android-apk.yml` compila o aplicativo Android, incluindo o despertador nativo, e disponibiliza o APK como artefato. Veja [instruções de execução e instalação](APK-GITHUB.md). Esse caminho substitui o login na Expo/EAS para a compilação.
+
+## Alternativa: gerar o APK pela Expo/EAS
 
 O perfil `preview` de `mobile/eas.json` produz um APK de distribuição interna. A conta Expo precisa estar autenticada antes de criar ou vincular o projeto e iniciar o build. Execute na pasta `mobile`, sem compartilhar senha no chat:
 

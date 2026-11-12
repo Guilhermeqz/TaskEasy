@@ -6,6 +6,7 @@ node_modules/
 dist/
 coverage/
 /backups/
+/artifacts/
 *.log
 *.db
 *.db-*
