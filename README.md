@@ -323,7 +323,7 @@ O trabalho foi separado em branches e commits descritivos:
 | 4 | `feat/mobile` | Telas, navegação, sessão, perfil, tema, haptics, API externa e testes |
 | 5 | `docs/entrega` | Documentação final e verificação |
 
-As etapas foram integradas localmente à `main`. O projeto está preparado para enviar a um repositório GitHub, com dependências e segredos ignorados. Nenhum remoto foi configurado nem houve publicação. Os testes da API que verificam o transporte do mobile usam os dois diretórios deste repositório; mantenha `api` e `mobile` juntos ao executá-los.
+As etapas foram integradas à `main` e enviadas para o repositório privado [Guilhermeqz/TaskEasy](https://github.com/Guilhermeqz/TaskEasy). O remoto `origin` aponta para esse repositório. Dependências, bancos, backups e segredos permanecem ignorados. Na aba Actions, o workflow **Gerar APK Android** compila o APK de teste sem Expo/EAS. Os testes da API que verificam o transporte do mobile usam os dois diretórios deste repositório; mantenha `api` e `mobile` juntos ao executá-los.
 
 ## Referências oficiais
 
