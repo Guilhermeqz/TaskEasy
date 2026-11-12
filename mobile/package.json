@@ -23,6 +23,7 @@
     "start": "expo start --lan",
     "test": "jest --runInBand",
     "android": "expo start --android",
+    "android:native": "expo run:android",
     "ios": "expo start --ios",
     "check": "expo install --check",
     "export:android": "expo export --platform android"

@@ -4,6 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Button, Chip, Dialog, Paragraph, Portal, Text, useTheme } from 'react-native-paper';
 import { useTaskActions } from '../hooks/useTasks';
 import ScreenState from '../components/ScreenState';
+import { reminderLabel } from '../utils/reminder';
 
 export default function TaskDetailsScreen({ route, navigation }) {
   const { colors } = useTheme();
@@ -62,6 +63,7 @@ export default function TaskDetailsScreen({ route, navigation }) {
           </Chip>
           <Text variant="headlineMedium" style={styles.title} accessibilityRole="header">{task.titulo}</Text>
           <Text variant="bodyLarge" style={styles.description}>{task.descricao || 'Nenhuma descrição adicionada.'}</Text>
+          {task.horario ? <Text variant="bodyLarge">Despertador: {reminderLabel(task)}</Text> : null}
           {actionError ? <Text style={{ color: colors.error }} accessibilityLiveRegion="polite">{actionError}</Text> : null}
           {!task.concluida ? <Button mode="contained" icon="check" onPress={complete} disabled={busy} loading={busy}>Concluir tarefa</Button> : null}
           <Button mode="outlined" icon="pencil-outline" onPress={() => navigation.navigate('TaskForm', { taskId })} disabled={busy}>Editar tarefa</Button>

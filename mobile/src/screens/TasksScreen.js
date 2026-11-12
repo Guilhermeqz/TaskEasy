@@ -3,6 +3,7 @@ import { Button, Card, Chip, Text, useTheme } from 'react-native-paper';
 import { useTasks } from '../hooks/useTasks';
 import ScreenState from '../components/ScreenState';
 import QuoteCard from '../components/QuoteCard';
+import { reminderLabel } from '../utils/reminder';
 
 export default function TasksScreen({ navigation }) {
   const { tasks, loading, refreshing, error, reload } = useTasks();
@@ -32,6 +33,7 @@ export default function TasksScreen({ navigation }) {
           accessibilityLabel={`${item.titulo}, ${item.concluida ? 'concluída' : 'pendente'}. Abrir detalhes.`}>
           <Card.Content>
             <Text variant="titleMedium" style={styles.taskTitle}>{item.titulo}</Text>
+            {item.horario ? <Text style={styles.taskTitle}>{reminderLabel(item)}</Text> : null}
             <Chip icon={item.concluida ? 'check-circle-outline' : 'clock-outline'} style={styles.chip} textStyle={styles.chipText}>
               {item.concluida ? 'Concluída' : 'Pendente'}
             </Chip>

@@ -6,6 +6,7 @@ import { AuthProvider } from './src/context/AuthContext';
 import { ThemeProvider, useAppTheme } from './src/context/ThemeContext';
 import RootNavigator from './src/navigation/RootNavigator';
 import ScreenState from './src/components/ScreenState';
+import AlarmNotice from './src/components/AlarmNotice';
 
 function Application() {
   const { theme, dark, ready } = useAppTheme();
@@ -13,6 +14,7 @@ function Application() {
     <PaperProvider theme={theme}>
       <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
         <StatusBar style={dark ? 'light' : 'dark'} />
+        <AlarmNotice />
         {ready ? <AuthProvider><RootNavigator /></AuthProvider> : <ScreenState loading message="Preparando o aplicativo…" />}
       </View>
     </PaperProvider>

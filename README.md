@@ -13,6 +13,7 @@ Anotações espalhadas dificultam acompanhar atividades pessoais. O TaskEasy re�
 - Navegação protegida: Stack para login, detalhes e formulário; Bottom Tabs para Tarefas e Perfil.
 - Lista com FlatList, keyExtractor, atualização ao retornar à tela e gesto de puxar para atualizar.
 - Criação e edição pelo mesmo formulário, com título, descrição e Switch de conclusão.
+- Horário opcional `HH:mm`, ocorrência única ou repetição diária e despertador contínuo no APK Android próprio. Veja [configuração e geração do APK](docs/DESPERTADORES.md).
 - Detalhes, edição, confirmação antes de excluir e vibração após concluir uma tarefa salva com sucesso.
 - Perfil com nome, e-mail, logout e preferência de tema persistida no aparelho.
 - Frase motivacional obtida diretamente da API pública ZenQuotes, com carregamento, erro, nova tentativa e atribuição da fonte. As frases são exibidas no idioma original do serviço, geralmente inglês.
@@ -58,6 +59,9 @@ Taskeasy/
 │   ├── package.json / package-lock.json
 │   ├── jest.config.js / jest.setup.js
 │   ├── assets/
+│   ├── modules/taskeasy-alarm/     # Despertador nativo Android (APK próprio)
+│   ├── plugins/                   # Configuração Android para API HTTP local
+│   ├── eas.json                   # Perfil preview para gerar APK
 │   ├── src/
 │   │   ├── components/             # Formulário, estados e cartão de frase
 │   │   ├── context/                # Autenticação e tema
@@ -184,6 +188,8 @@ Criação e atualização:
 
 O título é obrigatório, com até 120 caracteres após remover espaços externos; a descrição aceita até 2000 caracteres. `concluida` aceita apenas booleanos. Na criação e no PUT, descrição e status omitidos assumem `""` e `false`; o PUT substitui os dados da tarefa. O app sempre envia os três campos. Senhas são limitadas a 72 bytes, conforme o limite do bcrypt.
 
+Os campos opcionais `horario`, `lembrete_em` e `repetir_diariamente` guardam o agendamento. O backend preserva esses campos quando omitidos no PUT por clientes antigos. Formatos, permissões, instruções de APK e testes manuais estão em [Despertadores](docs/DESPERTADORES.md).
+
 Exemplo de teste real em PowerShell, com a API em execução:
 
 ```powershell
@@ -199,6 +205,32 @@ Invoke-RestMethod -Uri "http://localhost:3000/tasks/$($task.id)" -Headers $heade
 Envie o token em `Authorization: Bearer TOKEN`. O backend determina o dono pelo JWT e ignora IDs de usuário enviados no corpo. Tarefas de terceiros recebem o mesmo 404 de tarefas inexistentes.
 
 Erros usam `{ "message": "..." }`: 400 para dados/IDs/JSON inválidos, 401 para autenticação inválida ou expirada, 404 para recurso não encontrado, 413 para corpo acima de 100 KB e 500 para erro interno sem detalhes sensíveis na resposta.
+
+## Backup antes da migração para o Supabase
+
+Na raiz do projeto, execute:
+
+```powershell
+npm.cmd run backup --prefix api
+```
+
+O comando lê o banco indicado por `DATABASE_PATH` em `api/.env` e cria uma pasta única em `backups/`. Usa a API de backup online do SQLite, incluindo transações confirmadas no WAL mesmo quando o backend está aberto. Não aplica migrações, não cria um banco vazio se a origem estiver ausente e não sobrescreve backups anteriores.
+
+Cada backup validado contém:
+
+- `taskeasy.db`: cópia completa do SQLite, mantendo seu schema e seus dados.
+- `dados.json`: exportação dos usuários e tarefas para preparar a migração para PostgreSQL.
+- `manifest.json`: quantidades de registros, resultado da verificação de integridade e referências, tamanhos e checksums SHA-256 dos arquivos.
+
+A pasta `backups/` está ignorada pelo Git. Ela contém dados pessoais e hashes de senha e deve permanecer privada. O backup não envia dados ao Supabase ou a outro serviço. A transferência exige a configuração do projeto de destino e a adaptação do backend para PostgreSQL.
+
+Teste específico do backup, executado na raiz:
+
+```powershell
+node --test api/tests/backup.test.js
+```
+
+Os testes verificam dados presentes em WAL aberto, integridade, exportação, checksums, preservação de schema antigo, cópias sem sobrescrita e tratamento de origem inexistente.
 
 ## DER implementado
 
@@ -217,6 +249,9 @@ erDiagram
         text titulo
         text descricao
         integer concluida
+        text horario
+        text lembrete_em
+        integer repetir_diariamente
     }
 ```
 
@@ -241,8 +276,8 @@ npm.cmd run export:android
 
 Verificações executadas:
 
-- **11 testes de backend/integração:** hash bcrypt, seed idempotente, login, validação JWT, CRUD real, isolamento entre dois usuários, validação dos dados, uso do cliente HTTP do mobile e persistência após reiniciar o processo do servidor.
-- **10 testes do aplicativo:** restauração da sessão, logout, expiração, recuperação após falha de rede, tema persistido e falha ao salvar preferência, título obrigatório, preservação de dados após erro e vibração após sucesso.
+- **16 testes de backend/integração:** autenticação, CRUD, isolamento, persistência, backup online, migração e validação dos horários.
+- **18 testes do aplicativo:** sessão, tema, formulários, vibração, cálculo de horários, agendamento, cancelamento e tratamento de falhas do módulo de despertador.
 - Compatibilidade dos pacotes com o SDK e **21/21 verificações do Expo Doctor**.
 - Exportação do bundle Android e uma consulta real à ZenQuotes.
 

@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiRequest } from '../services/api';
+import { activateAlarmUser } from '../services/alarms';
 
 const TOKEN_KEY = '@taskeasy:token';
 const AuthContext = createContext(null);
@@ -14,6 +15,7 @@ export function AuthProvider({ children }) {
   const generation = useRef(0);
 
   const logout = useCallback(async () => {
+    await activateAlarmUser(null);
     // Só confirma a saída quando a sessão persistida também foi removida.
     await AsyncStorage.removeItem(TOKEN_KEY);
     generation.current += 1;
@@ -30,15 +32,17 @@ export function AuthProvider({ children }) {
     try {
       const storedToken = await AsyncStorage.getItem(TOKEN_KEY);
       if (currentGeneration !== generation.current) return;
-      if (!storedToken) return;
+      if (!storedToken) { await activateAlarmUser(null); return; }
       const profile = await apiRequest('/auth/me', { token: storedToken });
       if (currentGeneration !== generation.current) return;
+      await activateAlarmUser(profile.id);
       setToken(storedToken);
       setUser(profile);
     } catch (error) {
       if (currentGeneration !== generation.current) return;
       if (error.status === 401) {
         try {
+          await activateAlarmUser(null);
           await AsyncStorage.removeItem(TOKEN_KEY);
           setSessionMessage('Sua sessão expirou. Entre novamente.');
         } catch {
@@ -61,6 +65,7 @@ export function AuthProvider({ children }) {
     const result = await apiRequest('/auth/login', { method: 'POST', body: { email, password } });
     try { await AsyncStorage.setItem(TOKEN_KEY, result.token); }
     catch { throw new Error('Não foi possível salvar sua sessão neste aparelho.'); }
+    await activateAlarmUser(result.user.id);
     generation.current += 1;
     setSessionMessage('');
     setToken(result.token);
@@ -73,6 +78,7 @@ export function AuthProvider({ children }) {
       return await apiRequest(path, { ...options, token });
     } catch (error) {
       if (error.status === 401 && currentGeneration === generation.current) {
+        try { await activateAlarmUser(null); } catch {}
         setToken(null);
         setUser(null);
         setSessionMessage('Sua sessão expirou. Entre novamente.');

@@ -23,6 +23,13 @@ function openDatabase(filename) {
     );
     CREATE INDEX IF NOT EXISTS idx_tarefas_usuario ON tarefas(usuario_id);
   `);
+  // Migração aditiva: mantém intactas as tarefas já cadastradas.
+  db.transaction(() => {
+    const columns = new Set(db.pragma('table_info(tarefas)').map((column) => column.name));
+    if (!columns.has('horario')) db.exec('ALTER TABLE tarefas ADD COLUMN horario TEXT');
+    if (!columns.has('lembrete_em')) db.exec('ALTER TABLE tarefas ADD COLUMN lembrete_em TEXT');
+    if (!columns.has('repetir_diariamente')) db.exec('ALTER TABLE tarefas ADD COLUMN repetir_diariamente INTEGER NOT NULL DEFAULT 0 CHECK(repetir_diariamente IN (0, 1))');
+  })();
   return db;
 }
 

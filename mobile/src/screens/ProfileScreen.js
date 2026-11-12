@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { Avatar, Button, Card, Switch, Text, useTheme } from 'react-native-paper';
 import { useAuth } from '../context/AuthContext';
 import { useAppTheme } from '../context/ThemeContext';
+import AlarmSettings from '../components/AlarmSettings';
 
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
@@ -36,6 +37,7 @@ export default function ProfileScreen() {
           </Card.Content>
         </Card>
         {themeError || error ? <Text style={{ color: colors.error, marginBottom: 20 }} accessibilityLiveRegion="polite">{error || themeError}</Text> : null}
+        <AlarmSettings />
         <Button mode="outlined" icon="logout" onPress={leave} loading={busy} disabled={busy}>Sair da conta</Button>
       </View>
     </ScrollView>
