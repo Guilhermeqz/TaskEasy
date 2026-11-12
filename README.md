@@ -282,6 +282,7 @@ Verificações executadas:
 - **18 testes do aplicativo:** sessão, tema, formulários, vibração, cálculo de horários, agendamento, cancelamento e tratamento de falhas do módulo de despertador.
 - Compatibilidade dos pacotes com o SDK e **21/21 verificações do Expo Doctor**.
 - Exportação do bundle Android e uma consulta real à ZenQuotes.
+- Compilação nativa do APK com sucesso no [GitHub Actions](https://github.com/Guilhermeqz/TaskEasy/actions/runs/43138242480), download e validação do pacote e checksum. Veja o [APK de teste gerado](docs/APK-GITHUB.md).
 
 Os testes da API abrem servidores HTTP reais e arquivos SQLite temporários, removidos ao terminar. Os testes de componentes/providers substituem somente armazenamento, rede e hardware para verificar estados e erros de forma controlada. A implementação do aplicativo utiliza AsyncStorage, API Node.js e API externa reais.
 

@@ -2,6 +2,18 @@
 
 Este caminho compila o TaskEasy diretamente com o Android Gradle Plugin em um runner do GitHub. Não usa EAS, não exige conta Expo e o APK não depende de Expo Go ou Metro para abrir. As bibliotecas do Expo continuam fazendo parte do projeto e são compiladas dentro do aplicativo.
 
+## APK de teste gerado
+
+O [build 1](https://github.com/Guilhermeqz/TaskEasy/actions/runs/43138242480) terminou com sucesso a partir do commit `7107dc9`. O artefato **TaskEasy-APK-1** contém `TaskEasy.apk` e o checksum. O APK de teste usa `http://192.168.0.107:3000`, exige a API em execução e o celular no mesmo Wi-Fi do computador.
+
+O download local foi validado por SHA-256, presença do pacote Android, bibliotecas ARM64, serviço nativo de despertador e URL da API no bundle. O teste de som e tela bloqueada em aparelho físico ainda precisa ser realizado.
+
+SHA-256 do APK:
+
+```text
+ffa11e17ad29b857af8d408e0eaa3cfe0e1d8f576073afe83323ffe008a83e96
+```
+
 ## Preparar o repositório
 
 Envie o projeto completo para um repositório do GitHub, preservando `api`, `mobile` e `.github`. Não envie `.env`, arquivos do banco, `node_modules`, `backups` ou a pasta Android gerada. Esses caminhos estão ignorados pelo Git. O workflow deve estar na branch padrão do repositório para aparecer o botão de execução manual.

@@ -91,6 +91,6 @@ Para quem já possui Android SDK e ferramentas configuradas localmente, `npm.cmd
 
 ## Verificações automatizadas
 
-Foram executados os testes da API e do mobile, a exportação Android, o prebuild e a resolução do módulo pelo autolinking. Os testes JavaScript do agendador usam uma ponte nativa substituída para verificar agendamento, cancelamento, troca de usuário e erros. Eles não comprovam sozinhos o comportamento do Android bloqueado.
+Foram executados os testes da API e do mobile, a exportação Android, o prebuild, a resolução do módulo pelo autolinking e a compilação nativa completa do APK pelo GitHub Actions. O APK foi baixado e validado, incluindo a presença do serviço nativo e o checksum. Os testes JavaScript do agendador usam uma ponte nativa substituída para verificar agendamento, cancelamento, troca de usuário e erros. O comportamento do som e da tela bloqueada ainda deve ser validado no Android físico.
 
 Referências: [alarmes Android](https://developer.android.com/develop/background-work/services/alarms), [módulos locais Expo](https://docs.expo.dev/modules/get-started/) e [geração de APK com EAS](https://docs.expo.dev/build-reference/apk/).
