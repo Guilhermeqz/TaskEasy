@@ -4,6 +4,8 @@ Aplicativo acadêmico Android para gerenciamento de tarefas pessoais, feito com 
 
 ## Problema, solução e utilidade
 
+Para a versão local preservada para apresentação, consulte [APRESENTACAO-LOCAL.md](APRESENTACAO-LOCAL.md) e execute `INICIAR-APRESENTACAO.cmd` na raiz. Ela mantém o APK já testado e a API SQLite local.
+
 Anotações espalhadas dificultam acompanhar atividades pessoais. O TaskEasy reúne pendências e tarefas concluídas em uma lista individual, acessível mediante login. A proposta é facilitar a organização do dia com cadastro, edição, conclusão e exclusão de tarefas, em uma interface simples em português brasileiro.
 
 ## Funcionalidades entregues
