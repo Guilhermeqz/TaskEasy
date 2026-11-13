@@ -6,6 +6,8 @@ Aplicativo acadêmico Android para gerenciamento de tarefas pessoais, feito com 
 
 Para a versão local preservada para apresentação, consulte [APRESENTACAO-LOCAL.md](APRESENTACAO-LOCAL.md) e execute `INICIAR-APRESENTACAO.cmd` na raiz. Ela mantém o APK já testado e a API SQLite local.
 
+Para publicar a API com banco PostgreSQL externo e preservar a execução local, consulte [Render e Supabase](docs/DEPLOY-RENDER-SUPABASE.md). Sem `DATABASE_URL`, a API continua usando SQLite; com essa variável privada, usa PostgreSQL. A publicação depende da configuração das contas e da validação remota.
+
 Anotações espalhadas dificultam acompanhar atividades pessoais. O TaskEasy reúne pendências e tarefas concluídas em uma lista individual, acessível mediante login. A proposta é facilitar a organização do dia com cadastro, edição, conclusão e exclusão de tarefas, em uma interface simples em português brasileiro.
 
 ## Funcionalidades entregues

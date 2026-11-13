@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const HttpError = require('./HttpError');
+const { get } = require('../database/queries');
 
 const tokenOptions = { algorithm: 'HS256', expiresIn: '8h', issuer: 'taskeasy', audience: 'taskeasy-mobile' };
 // Comparar um hash mesmo para e-mail inexistente reduz diferenças de tempo.
@@ -14,7 +15,7 @@ async function login(db, secret, body) {
   if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) || Buffer.byteLength(password) > 72) {
     throw new HttpError(400, 'E-mail ou senha em formato inválido.');
   }
-  const row = db.prepare('SELECT * FROM usuarios WHERE email = ?').get(email.trim().toLowerCase());
+  const row = await get(db, 'SELECT * FROM usuarios WHERE LOWER(email) = LOWER(?)', email.trim().toLowerCase());
   const matches = await bcrypt.compare(password, row?.senha_hash || dummyHash);
   if (!row || !matches) throw new HttpError(401, 'E-mail ou senha incorretos.');
   const user = { id: row.id, nome: row.nome, email: row.email };

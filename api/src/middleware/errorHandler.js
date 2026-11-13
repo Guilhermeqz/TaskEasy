@@ -12,7 +12,7 @@ function errorHandler(error, _req, res, _next) {
     return res.status(413).json({ message: 'Corpo da requisição muito grande.' });
   }
 
-  console.error('Erro interno na API:', error);
+  console.error('Erro interno na API:', error.code || error.name || 'erro desconhecido');
   return res.status(500).json({ message: 'Erro interno do servidor.' });
 }
 

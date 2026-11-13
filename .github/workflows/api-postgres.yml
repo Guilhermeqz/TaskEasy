@@ -1,0 +1,41 @@
+name: Validar API SQLite e PostgreSQL
+
+on:
+  push:
+    branches: [main, feat/api-render-supabase]
+    paths: [api/**, mobile/src/services/http.mjs, .github/workflows/api-postgres.yml]
+  pull_request:
+    paths: [api/**, mobile/src/services/http.mjs, .github/workflows/api-postgres.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: local-ci-password
+          POSTGRES_DB: postgres
+        ports: [5432:5432]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20.20.0
+          cache: npm
+          cache-dependency-path: api/package-lock.json
+      - run: npm ci --prefix api
+      - run: npm test --prefix api
+        env:
+          TEST_DATABASE_URL: postgresql://postgres:local-ci-password@127.0.0.1:5432/postgres
