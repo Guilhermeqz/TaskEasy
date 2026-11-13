@@ -14,7 +14,7 @@ SHA-256 do APK web:
 32a10ac1438c59e180d8e5a404a24baeac62ee42c0761995d8c452d07f9898f3
 ```
 
-Para recompilar, selecione a branch `feat/api-render-supabase` e informe a URL publica em `api_url`. O codigo exato deste APK esta na tag `apk-web-v1.1.0`. A copia local do arquivo fica em `artifacts/apk-43336605357/TaskEasy.apk`; o pacote privado de entrega fica em `backups/TaskEasy-Internet-v1.1.0.zip`.
+Para recompilar a versao integrada, selecione a branch `main` e informe a URL publica em `api_url`. A branch de desenvolvimento `feat/api-render-supabase` foi integrada a `main`; o codigo exato deste APK permanece na tag `apk-web-v1.1.0`. A copia local do arquivo fica em `artifacts/apk-43336605357/TaskEasy.apk`; o pacote privado de entrega fica em `backups/TaskEasy-Internet-v1.1.0.zip`.
 
 ## APK local preservado (1.0.0)
 

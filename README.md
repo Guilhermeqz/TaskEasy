@@ -338,6 +338,8 @@ O trabalho foi separado em branches e commits descritivos:
 
 As etapas foram integradas à `main` e enviadas para o repositório privado [Guilhermeqz/TaskEasy](https://github.com/Guilhermeqz/TaskEasy). O remoto `origin` aponta para esse repositório. Dependências, bancos, backups e segredos permanecem ignorados. Na aba Actions, o workflow **Gerar APK Android** compila o APK de teste sem Expo/EAS. Os testes da API que verificam o transporte do mobile usam os dois diretórios deste repositório; mantenha `api` e `mobile` juntos ao executá-los.
 
+A versão web com Render, Supabase e APK 1.1.0 também está integrada à `main`. Para novas compilações, selecione essa branch. As tags `apresentacao-local-v1` e `apk-web-v1.1.0` preservam as referências das versões local e web, respectivamente.
+
 ## Referências oficiais
 
 - [Expo: criação do projeto](https://docs.expo.dev/more/create-expo/)

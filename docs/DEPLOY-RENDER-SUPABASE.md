@@ -42,14 +42,16 @@ Essa configuracao usa `http://127.0.0.1:3001/health`. A API local continua na po
 
 ## 3. Criar o Web Service no Render
 
-Conecte o repositorio privado `Guilhermeqz/TaskEasy` ao Render. As alteracoes web estao na branch `feat/api-render-supabase`; a versao local permanece preservada na tag.
+Conecte o repositorio privado `Guilhermeqz/TaskEasy` ao Render. As alteracoes web foram integradas a `main` a partir da branch `feat/api-render-supabase`; a versao local permanece preservada na tag `apresentacao-local-v1`.
+
+O servico existente foi configurado para acompanhar `feat/api-render-supabase` e pode continuar usando essa branch, com a mesma API ja validada. A integracao Git nao muda automaticamente a branch do servico no painel Render. Para novos servicos ou ao atualizar explicitamente essa configuracao, utilize `main`, conforme abaixo.
 
 No painel **New > Web Service**, use:
 
 | Campo | Valor |
 | --- | --- |
 | Repository | Guilhermeqz/TaskEasy |
-| Branch | feat/api-render-supabase |
+| Branch | main |
 | Name | taskeasy-api (ou nome disponivel) |
 | Runtime | Node |
 | Root Directory | api |
