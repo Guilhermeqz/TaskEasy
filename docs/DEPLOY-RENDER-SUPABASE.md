@@ -58,7 +58,9 @@ No painel **New > Web Service**, use:
 | Instance Type | Free |
 | Health Check Path | /health |
 
-Em **Environment**, configure:
+Se `api/.env.render` tiver sido preparado localmente, abra esse arquivo privado e use **Add from .env** em **Environment Variables** no Render para importar seu conteudo. Ele contem somente as variaveis de producao abaixo; nao envie o arquivo pela conversa e nao importe `api/.env.cloud`, que usa host e porta para testes locais.
+
+Para preencher manualmente, configure:
 
 | Variavel | Valor |
 | --- | --- |
@@ -76,5 +78,14 @@ Escolha **Free** explicitamente; este procedimento nao autoriza planos pagos. O 
 ## 4. Validar antes do novo APK
 
 Guarde a URL HTTPS fornecida pelo Render. Valide `/health`, login, consulta de tarefas, criacao, edicao, exclusao e persistencia apos reiniciar o servico. Depois gere um novo APK pelo workflow existente, usando essa URL em `api_url`. O APK antigo e o backup local continuam disponiveis.
+
+## Validacao realizada na preparacao
+
+- Migracao do SQLite para o projeto autorizado: 1 usuario e 3 tarefas, com recibo no backup privado.
+- Login e CRUD por HTTP real usando Supabase, incluindo horarios e persistencia ao reabrir conexoes; a tarefa temporaria de verificacao foi removida.
+- Suíte SQLite/TLS local: 19 testes aprovados; a integracao PostgreSQL descartavel e executada no CI.
+- [GitHub Actions: PostgreSQL 16 e SQLite aprovados](https://github.com/Guilhermeqz/TaskEasy/actions/runs/43333802129), incluindo importacao atomica, protecao contra sobrescrita, isolamento por usuario, horarios, CRUD e reabertura das conexoes.
+
+A publicacao no Render e o novo APK ainda dependem de concluir a configuracao no painel e validar a URL publica.
 
 Referencias: [Supabase: conectar ao PostgreSQL](https://supabase.com/docs/guides/database/connecting-to-postgres), [Render: Express](https://render.com/docs/deploy-node-express-app), [limites gratuitos](https://render.com/docs/free).
