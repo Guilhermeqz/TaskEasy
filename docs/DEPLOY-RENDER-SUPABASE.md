@@ -96,6 +96,6 @@ O aplicativo 1.1.0 (versionCode 2) possui essa URL como padrao no APK, e o workf
 - Suíte SQLite/TLS local: 19 testes aprovados; a integracao PostgreSQL descartavel e executada no CI.
 - [GitHub Actions: PostgreSQL 16 e SQLite aprovados](https://github.com/Guilhermeqz/TaskEasy/actions/runs/43333802129), incluindo importacao atomica, protecao contra sobrescrita, isolamento por usuario, horarios, CRUD e reabertura das conexoes.
 
-A API publica foi validada. O novo APK ainda depende de concluir sua compilacao e testar o aplicativo no celular.
+A API publica foi validada e o [APK web 1.1.0 foi compilado](APK-GITHUB.md). Foram conferidos checksum, URL publica, modulo nativo e assinatura. Falta a conferencia no celular com dados moveis e o teste fisico do despertador nessa nova versao.
 
 Referencias: [Supabase: conectar ao PostgreSQL](https://supabase.com/docs/guides/database/connecting-to-postgres), [Render: Express](https://render.com/docs/deploy-node-express-app), [limites gratuitos](https://render.com/docs/free).
