@@ -4,6 +4,8 @@ API: **https://taskeasy-ejrv.onrender.com**. Banco: **Supabase PostgreSQL**. Apl
 
 [Baixar TaskEasy-APK-3 no GitHub](https://github.com/Guilhermeqz/TaskEasy/actions/runs/43336605357/artifacts/13998945369) (entre na sua conta, extraia o ZIP e instale `TaskEasy.apk`). O checksum, a URL da API, a versao e a assinatura foram conferidos; a assinatura coincide com o APK local anterior.
 
+O usuario confirmou que esse APK web funcionou no celular. Os passos abaixo continuam servindo para ensaiar a apresentacao e conferir especificamente os dados moveis e o despertador da nova versao.
+
 ## Antes de apresentar
 
 1. Instale o APK 1.1.0 e mantenha uma copia do arquivo no computador e no celular.

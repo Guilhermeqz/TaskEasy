@@ -10,6 +10,8 @@ Para publicar a API com banco PostgreSQL externo e preservar a execução local,
 
 A API foi publicada em **https://taskeasy-ejrv.onrender.com**, com login e CRUD validados pela internet. Veja o [roteiro de apresentação da versão web](docs/APRESENTACAO-WEB.md), incluindo o teste com dados móveis e a reserva local.
 
+O usuário confirmou o funcionamento do APK web 1.1.0 no celular. A confirmação específica do uso por dados móveis e do despertador nessa versão permanece separada do teste geral do aplicativo.
+
 Anotações espalhadas dificultam acompanhar atividades pessoais. O TaskEasy reúne pendências e tarefas concluídas em uma lista individual, acessível mediante login. A proposta é facilitar a organização do dia com cadastro, edição, conclusão e exclusão de tarefas, em uma interface simples em português brasileiro.
 
 ## Funcionalidades entregues
