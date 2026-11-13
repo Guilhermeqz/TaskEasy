@@ -4,6 +4,8 @@ Este caminho compila o TaskEasy diretamente com o Android Gradle Plugin em um ru
 
 ## APK de teste gerado
 
+A nova versao 1.1.0 usa a API publica **https://taskeasy-ejrv.onrender.com**, com banco Supabase. Para compila-la, selecione a branch `feat/api-render-supabase` e informe esse endereco em `api_url`. O build local abaixo permanece preservado como reserva.
+
 O [build 1](https://github.com/Guilhermeqz/TaskEasy/actions/runs/43138242480) terminou com sucesso a partir do commit `7107dc9`. O artefato **TaskEasy-APK-1** contém `TaskEasy.apk` e o checksum. O APK de teste usa `http://192.168.0.107:3000`, exige a API em execução e o celular no mesmo Wi-Fi do computador.
 
 O download local foi validado por SHA-256, presença do pacote Android, bibliotecas ARM64, serviço nativo de despertador e URL da API no bundle. O teste de som e tela bloqueada em aparelho físico ainda precisa ser realizado.

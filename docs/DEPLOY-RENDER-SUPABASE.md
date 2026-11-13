@@ -77,7 +77,17 @@ Escolha **Free** explicitamente; este procedimento nao autoriza planos pagos. O 
 
 ## 4. Validar antes do novo APK
 
-Guarde a URL HTTPS fornecida pelo Render. Valide `/health`, login, consulta de tarefas, criacao, edicao, exclusao e persistencia apos reiniciar o servico. Depois gere um novo APK pelo workflow existente, usando essa URL em `api_url`. O APK antigo e o backup local continuam disponiveis.
+A API foi publicada em **https://taskeasy-ejrv.onrender.com**. O endpoint [health](https://taskeasy-ejrv.onrender.com/health), login, perfil, exigencia de autenticacao, listagem, criacao, edicao, leitura, horarios e exclusao foram validados por HTTP publico. A tarefa temporaria de teste foi removida e as 3 tarefas originais permaneceram preservadas.
+
+Para repetir essa verificacao na raiz:
+
+```powershell
+npm.cmd run deploy:verify --prefix api -- https://taskeasy-ejrv.onrender.com
+```
+
+O comando usa o usuario demo, cria e remove uma tarefa temporaria, sem alterar as tarefas existentes. A verificacao de persistencia apos reabrir conexoes foi feita com Supabase; reiniciar o servico no Render ainda depende do acesso ao painel.
+
+O aplicativo 1.1.0 (versionCode 2) possui essa URL como padrao no APK, e o workflow recebe o mesmo endereco em `api_url`. `EXPO_PUBLIC_API_URL` continua permitindo compilar APKs locais; no Expo Go, o host LAN continua disponivel para desenvolvimento. O APK antigo e o backup local continuam preservados.
 
 ## Validacao realizada na preparacao
 
@@ -86,6 +96,6 @@ Guarde a URL HTTPS fornecida pelo Render. Valide `/health`, login, consulta de t
 - Suíte SQLite/TLS local: 19 testes aprovados; a integracao PostgreSQL descartavel e executada no CI.
 - [GitHub Actions: PostgreSQL 16 e SQLite aprovados](https://github.com/Guilhermeqz/TaskEasy/actions/runs/43333802129), incluindo importacao atomica, protecao contra sobrescrita, isolamento por usuario, horarios, CRUD e reabertura das conexoes.
 
-A publicacao no Render e o novo APK ainda dependem de concluir a configuracao no painel e validar a URL publica.
+A API publica foi validada. O novo APK ainda depende de concluir sua compilacao e testar o aplicativo no celular.
 
 Referencias: [Supabase: conectar ao PostgreSQL](https://supabase.com/docs/guides/database/connecting-to-postgres), [Render: Express](https://render.com/docs/deploy-node-express-app), [limites gratuitos](https://render.com/docs/free).

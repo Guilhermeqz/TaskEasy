@@ -12,6 +12,7 @@
     "backup": "node scripts/backup.js",
     "cloud:check": "node --env-file=.env.cloud scripts/cloud-check.js",
     "cloud:verify": "node --env-file=.env.cloud scripts/verify-cloud.js",
+    "deploy:verify": "node scripts/verify-deployment.mjs",
     "cloud:migrate": "node --env-file=.env.cloud scripts/migrate-cloud.js",
     "test": "node --test",
     "dev": "node --watch src/server.js",

@@ -2,7 +2,7 @@
   "expo": {
     "name": "TaskEasy",
     "slug": "taskeasy",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,6 +11,7 @@
     },
     "android": {
       "package": "com.taskeasy.app",
+      "versionCode": 2,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -20,6 +21,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "apiUrl": "https://taskeasy-ejrv.onrender.com"
     },
     "plugins": [
       "expo-font",
