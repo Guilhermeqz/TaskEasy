@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const HttpError = require('../services/HttpError');
+const { get } = require('../database/queries');
 
-function authenticate(req, _res, next) {
+async function authenticate(req, _res, next) {
   const match = /^Bearer ([^\s]+)$/i.exec(req.headers.authorization || '');
   if (!match) return next(new HttpError(401, 'Autenticação necessária.'));
   try {
@@ -11,7 +12,7 @@ function authenticate(req, _res, next) {
     if (!/^[1-9]\d*$/.test(payload.sub) || !Number.isSafeInteger(Number(payload.sub))) {
       return next(new HttpError(401, 'Sessão inválida ou expirada.'));
     }
-    req.user = req.app.locals.db.prepare('SELECT id, nome, email FROM usuarios WHERE id = ?').get(Number(payload.sub));
+    req.user = await get(req.app.locals.db, 'SELECT id, nome, email FROM usuarios WHERE id = ?', Number(payload.sub));
     if (!req.user) return next(new HttpError(401, 'Sessão inválida ou expirada.'));
     return next();
   } catch (error) {

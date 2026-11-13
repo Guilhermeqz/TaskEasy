@@ -10,9 +10,14 @@
   "scripts": {
     "setup": "node scripts/setup.js",
     "backup": "node scripts/backup.js",
+    "cloud:check": "node --env-file=.env.cloud scripts/cloud-check.js",
+    "cloud:verify": "node --env-file=.env.cloud scripts/verify-cloud.js",
+    "deploy:verify": "node scripts/verify-deployment.mjs",
+    "cloud:migrate": "node --env-file=.env.cloud scripts/migrate-cloud.js",
     "test": "node --test",
     "dev": "node --watch src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "start:cloud": "node --env-file=.env.cloud src/server.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -20,6 +25,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.3.0",
-    "jsonwebtoken": "^9.0.3"
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.1"
   }
 }

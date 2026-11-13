@@ -1,4 +1,5 @@
 const HttpError = require('./HttpError');
+const { all, get, run } = require('../database/queries');
 
 function parseId(value) {
   if (!/^[1-9]\d*$/.test(String(value)) || !Number.isSafeInteger(Number(value))) {
@@ -37,36 +38,35 @@ function serialize(row) {
   return { id: row.id, titulo: row.titulo, descricao: row.descricao, concluida: Boolean(row.concluida), horario: row.horario, lembrete_em: row.lembrete_em, repetir_diariamente: Boolean(row.repetir_diariamente) };
 }
 
-function list(db, userId) {
-  return db.prepare('SELECT id, titulo, descricao, concluida, horario, lembrete_em, repetir_diariamente FROM tarefas WHERE usuario_id = ? ORDER BY id DESC')
-    .all(userId).map(serialize);
+async function list(db, userId) {
+  const rows = await all(db, 'SELECT id, titulo, descricao, concluida, horario, lembrete_em, repetir_diariamente FROM tarefas WHERE usuario_id = ? ORDER BY id DESC', userId);
+  return rows.map(serialize);
 }
 
-function find(db, userId, id) {
-  const row = db.prepare('SELECT id, titulo, descricao, concluida, horario, lembrete_em, repetir_diariamente FROM tarefas WHERE id = ? AND usuario_id = ?')
-    .get(parseId(id), userId);
+async function find(db, userId, id) {
+  const row = await get(db, 'SELECT id, titulo, descricao, concluida, horario, lembrete_em, repetir_diariamente FROM tarefas WHERE id = ? AND usuario_id = ?', parseId(id), userId);
   if (!row) throw new HttpError(404, 'Tarefa não encontrada.');
   return serialize(row);
 }
 
-function create(db, userId, body) {
+async function create(db, userId, body) {
   const task = validateTask(body);
-  const result = db.prepare('INSERT INTO tarefas (usuario_id, titulo, descricao, concluida, horario, lembrete_em, repetir_diariamente) VALUES (?, ?, ?, ?, ?, ?, ?)')
-    .run(userId, task.titulo, task.descricao, task.concluida, task.horario, task.lembreteEm, task.repetirDiariamente);
-  return find(db, userId, result.lastInsertRowid);
+  const result = await get(db, 'INSERT INTO tarefas (usuario_id, titulo, descricao, concluida, horario, lembrete_em, repetir_diariamente) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id',
+    userId, task.titulo, task.descricao, task.concluida, task.horario, task.lembreteEm, task.repetirDiariamente);
+  return find(db, userId, result.id);
 }
 
-function update(db, userId, id, body) {
-  const current = find(db, userId, id);
+async function update(db, userId, id, body) {
+  const current = await find(db, userId, id);
   const task = validateTask(body, current);
-  db.prepare('UPDATE tarefas SET titulo = ?, descricao = ?, concluida = ?, horario = ?, lembrete_em = ?, repetir_diariamente = ? WHERE id = ? AND usuario_id = ?')
-    .run(task.titulo, task.descricao, task.concluida, task.horario, task.lembreteEm, task.repetirDiariamente, current.id, userId);
+  await run(db, 'UPDATE tarefas SET titulo = ?, descricao = ?, concluida = ?, horario = ?, lembrete_em = ?, repetir_diariamente = ? WHERE id = ? AND usuario_id = ?',
+    task.titulo, task.descricao, task.concluida, task.horario, task.lembreteEm, task.repetirDiariamente, current.id, userId);
   return find(db, userId, current.id);
 }
 
-function remove(db, userId, id) {
-  const task = find(db, userId, id);
-  db.prepare('DELETE FROM tarefas WHERE id = ? AND usuario_id = ?').run(task.id, userId);
+async function remove(db, userId, id) {
+  const task = await find(db, userId, id);
+  await run(db, 'DELETE FROM tarefas WHERE id = ? AND usuario_id = ?', task.id, userId);
 }
 
 module.exports = { list, find, create, update, remove };

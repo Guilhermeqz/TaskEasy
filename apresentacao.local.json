@@ -1,0 +1,6 @@
+{
+  "versao": "apresentacao-local-v1",
+  "apiUrl": "http://192.168.0.107:3000",
+  "apk": "APK/TaskEasy.apk",
+  "apkSha256": "ffa11e17ad29b857af8d408e0eaa3cfe0e1d8f576073afe83323ffe008a83e96"
+}

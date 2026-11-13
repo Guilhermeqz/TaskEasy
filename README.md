@@ -1,8 +1,16 @@
 ﻿# TaskEasy
 
-Aplicativo acadêmico Android para gerenciamento de tarefas pessoais, feito com React Native e Expo, com uma API Node.js/Express e persistência real em SQLite.
+Aplicativo acadêmico Android para gerenciamento de tarefas pessoais, feito com React Native e Expo, com uma API Node.js/Express e persistência em SQLite local ou PostgreSQL no Supabase.
 
 ## Problema, solução e utilidade
+
+Para a versão local preservada para apresentação, consulte [APRESENTACAO-LOCAL.md](APRESENTACAO-LOCAL.md) e execute `INICIAR-APRESENTACAO.cmd` na raiz. Ela mantém o APK já testado e a API SQLite local.
+
+Para publicar a API com banco PostgreSQL externo e preservar a execução local, consulte [Render e Supabase](docs/DEPLOY-RENDER-SUPABASE.md). Sem `DATABASE_URL`, a API continua usando SQLite; com essa variável privada, usa PostgreSQL. A publicação depende da configuração das contas e da validação remota.
+
+A API foi publicada em **https://taskeasy-ejrv.onrender.com**, com login e CRUD validados pela internet. Veja o [roteiro de apresentação da versão web](docs/APRESENTACAO-WEB.md), incluindo o teste com dados móveis e a reserva local.
+
+O usuário confirmou o funcionamento do APK web 1.1.0 no celular. A confirmação específica do uso por dados móveis e do despertador nessa versão permanece separada do teste geral do aplicativo.
 
 Anotações espalhadas dificultam acompanhar atividades pessoais. O TaskEasy reúne pendências e tarefas concluídas em uma lista individual, acessível mediante login. A proposta é facilitar a organização do dia com cadastro, edição, conclusão e exclusão de tarefas, em uma interface simples em português brasileiro.
 
@@ -31,7 +39,7 @@ Não há cadastro de usuários na interface: o escopo solicitado utiliza um usu�
 | Navegação | React Navigation 7, Native Stack e Bottom Tabs |
 | Estado e armazenamento | Context API, hooks customizados e AsyncStorage |
 | Comunicação e dispositivo | Fetch, Expo Constants e Expo Haptics |
-| Backend | Node.js, Express 5, better-sqlite3, bcrypt, jsonwebtoken, dotenv e CORS |
+| Backend | Node.js, Express 5, better-sqlite3, pg (PostgreSQL), bcrypt, jsonwebtoken, dotenv e CORS |
 | Testes | Node Test Runner, Jest, jest-expo e React Native Testing Library |
 
 Os arquivos `package-lock.json` registram as versões instaladas. O renderer de testes acompanha exatamente o React 19.2.3. Os módulos nativos foram alinhados com `expo install`.
@@ -111,6 +119,8 @@ Configurações de `api/.env`:
 | `PORT` | `3000` |
 | `JWT_SECRET` | Gerado por `npm run setup`; mínimo de 32 caracteres |
 | `DATABASE_PATH` | `./data/taskeasy.db`, relativo à pasta api |
+| `DATABASE_URL` | Opcional: conexão privada PostgreSQL; quando presente, substitui o uso de SQLite |
+| `DATABASE_CA_CERT` | Opcional: CA PEM do provedor; o pooler Supabase já possui CA pública incluída no código |
 | `SEED_DEMO` | `true`; `false` desativa a criação automática do usuário demo |
 
 Para executar sem reinicialização automática, use `npm.cmd start` na pasta api. Encerre com `Ctrl+C`.
@@ -136,6 +146,8 @@ Abra o Expo Go no Android e escaneie o QR code. Computador e celular devem estar
 
 O comando de início utiliza `--lan`. Com `EXPO_PUBLIC_API_URL` vazio ou ausente, o aplicativo usa o host da sessão Expo para localizar o computador e conecta à porta 3000. Para emulador com host de loopback, usa `10.0.2.2` no Android.
 
+No APK próprio, sem host de desenvolvimento, o endereço padrão é a API HTTPS configurada em `mobile/app.json`. O workflow também recebe explicitamente a URL pública em `api_url`. `EXPO_PUBLIC_API_URL` pode substituir esse endereço para compilar um APK local.
+
 Para fixar o endereço, usar outra porta ou um túnel do Expo, copie o exemplo **somente se ainda não tiver um arquivo próprio**:
 
 ```powershell
@@ -159,7 +171,7 @@ Nunca coloque segredos em variáveis `EXPO_PUBLIC_*`, que fazem parte do aplicat
 - **E-mail:** `demo@taskeasy.com`
 - **Senha:** `TaskEasy@123`
 
-Essas credenciais são públicas e destinadas à demonstração acadêmica local. O banco armazena somente o hash bcrypt da senha. O JWT expira em oito horas; o logout remove o token do aparelho. O aplicativo não implementa revogação de tokens no servidor.
+Essas credenciais são públicas e destinadas à demonstração acadêmica. O banco armazena somente o hash bcrypt da senha. O JWT expira em oito horas; o logout remove o token do aparelho. O aplicativo não implementa revogação de tokens no servidor.
 
 ## Endpoints
 
@@ -222,7 +234,7 @@ Cada backup validado contém:
 - `dados.json`: exportação dos usuários e tarefas para preparar a migração para PostgreSQL.
 - `manifest.json`: quantidades de registros, resultado da verificação de integridade e referências, tamanhos e checksums SHA-256 dos arquivos.
 
-A pasta `backups/` está ignorada pelo Git. Ela contém dados pessoais e hashes de senha e deve permanecer privada. O backup não envia dados ao Supabase ou a outro serviço. A transferência exige a configuração do projeto de destino e a adaptação do backend para PostgreSQL.
+A pasta `backups/` está ignorada pelo Git. Ela contém dados pessoais e hashes de senha e deve permanecer privada. O comando `backup` não envia dados a outro serviço. A importação separada `cloud:migrate` transfere os dados ao projeto Supabase configurado, exige tabelas vazias e mantém o SQLite original. Veja [Render e Supabase](docs/DEPLOY-RENDER-SUPABASE.md).
 
 Teste específico do backup, executado na raiz:
 

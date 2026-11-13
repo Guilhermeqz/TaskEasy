@@ -2,11 +2,25 @@
 
 Este caminho compila o TaskEasy diretamente com o Android Gradle Plugin em um runner do GitHub. Não usa EAS, não exige conta Expo e o APK não depende de Expo Go ou Metro para abrir. As bibliotecas do Expo continuam fazendo parte do projeto e são compiladas dentro do aplicativo.
 
-## APK de teste gerado
+## APK com API publica (1.1.0)
+
+O [build 3](https://github.com/Guilhermeqz/TaskEasy/actions/runs/43336605357) terminou com sucesso a partir do commit `64ae1ff4a2d9d6602c1aa7f1895dd70982c3a766`. O artefato [TaskEasy-APK-3](https://github.com/Guilhermeqz/TaskEasy/actions/runs/43336605357/artifacts/13998945369) contem o novo `TaskEasy.apk` e seu checksum. O repositorio e privado: entre no GitHub para baixar, extraia o ZIP e instale o APK.
+
+A versao 1.1.0 (versionCode 2) usa **https://taskeasy-ejrv.onrender.com**, com banco Supabase. Foi conferida a URL publica no bundle, a ausencia do IP antigo, o modulo nativo de despertador e as bibliotecas ARM 32/64 bits. A assinatura e igual a do APK local preservado, permitindo atualiza-lo. Os testes do aplicativo e a verificacao do Expo passaram. O usuario confirmou que o novo APK funcionou no celular; a confirmacao especifica do uso por dados moveis e do despertador nessa versao ainda esta pendente.
+
+SHA-256 do APK web:
+
+```text
+32a10ac1438c59e180d8e5a404a24baeac62ee42c0761995d8c452d07f9898f3
+```
+
+Para recompilar, selecione a branch `feat/api-render-supabase` e informe a URL publica em `api_url`. O codigo exato deste APK esta na tag `apk-web-v1.1.0`. A copia local do arquivo fica em `artifacts/apk-43336605357/TaskEasy.apk`; o pacote privado de entrega fica em `backups/TaskEasy-Internet-v1.1.0.zip`.
+
+## APK local preservado (1.0.0)
 
 O [build 1](https://github.com/Guilhermeqz/TaskEasy/actions/runs/43138242480) terminou com sucesso a partir do commit `7107dc9`. O artefato **TaskEasy-APK-1** contém `TaskEasy.apk` e o checksum. O APK de teste usa `http://192.168.0.107:3000`, exige a API em execução e o celular no mesmo Wi-Fi do computador.
 
-O download local foi validado por SHA-256, presença do pacote Android, bibliotecas ARM64, serviço nativo de despertador e URL da API no bundle. O teste de som e tela bloqueada em aparelho físico ainda precisa ser realizado.
+O download local foi validado por SHA-256, presença do pacote Android, bibliotecas ARM64, serviço nativo de despertador e URL da API no bundle. O usuário confirmou o funcionamento do aplicativo e do despertador dessa versão local no celular. O funcionamento geral do novo APK web também foi confirmado no aparelho, conforme registrado acima.
 
 SHA-256 do APK:
 
