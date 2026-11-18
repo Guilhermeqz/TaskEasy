@@ -60,6 +60,37 @@ Escolhemos esse tema pela utilidade na nossa rotina de estudos e compromissos. Q
 
 As frases são exibidas no idioma recebido da ZenQuotes, geralmente inglês. Uma falha nesse serviço não impede o uso das tarefas. A conta de demonstração já está cadastrada; o aplicativo não possui uma tela de criação de contas.
 
+## Requisitos do projeto
+
+Aplicamos os dez requisitos do núcleo da atividade da seguinte forma:
+
+| Requisito | Como usamos no TaskEasy | Onde conferir |
+| --- | --- | --- |
+| 1. Navegação com parâmetros | Combinamos Native Stack e Bottom Tabs. Passamos o parâmetro `taskId` entre a lista, os detalhes e o formulário de edição. | [Navegação](mobile/src/navigation/RootNavigator.js) e [lista](mobile/src/screens/TasksScreen.js) |
+| 2. Autenticação pela API Node.js | O login retorna um JWT, que guardamos no aparelho e enviamos no header `Authorization: Bearer`. | [Autenticação](mobile/src/context/AuthContext.js) e [requisições HTTP](mobile/src/services/http.mjs) |
+| 3. Context API | Compartilhamos o usuário autenticado e a preferência de tema entre as telas. | [AuthContext](mobile/src/context/AuthContext.js) e [ThemeContext](mobile/src/context/ThemeContext.js) |
+| 4. Consumo de API externa | Buscamos frases na ZenQuotes e exibimos carregamento, erro e opção de tentar novamente. | [Frase do dia](mobile/src/components/QuoteCard.js) e [serviço de frases](mobile/src/services/quotes.mjs) |
+| 5. Lista com detalhe | Utilizamos `FlatList`, `keyExtractor` baseado no ID e uma tela para consultar os detalhes da tarefa. | [Lista](mobile/src/screens/TasksScreen.js) e [detalhes](mobile/src/screens/TaskDetailsScreen.js) |
+| 6. Formulário controlado | Usamos `TextInput`, `Switch` e `Button`, estado para os campos e validação antes de salvar. O mesmo formulário atende cadastro e edição. | [TaskForm](mobile/src/components/TaskForm.js) |
+| 7. Persistência local | Salvamos a sessão e a escolha do tema no AsyncStorage. As tarefas permanecem no banco da API. | [Sessão](mobile/src/context/AuthContext.js) e [tema](mobile/src/context/ThemeContext.js) |
+| 8. Hook customizado | O hook `useTasks` cuida da consulta das tarefas, atualização, carregamento e erros. | [useTasks](mobile/src/hooks/useTasks.js) |
+| 9. Interface responsiva | Construímos a interface com React Native Paper e `StyleSheet`, utilizando layouts flexíveis, rolagem e limites de largura. | [Formulário](mobile/src/components/TaskForm.js) e [perfil](mobile/src/screens/ProfileScreen.js) |
+| 10. Organização de pastas | Separamos `screens`, `components`, `hooks`, `services`, `context` e `navigation` dentro do aplicativo. | [Código do aplicativo](mobile/src/) |
+
+### Recurso de dispositivo
+
+Escolhemos a **vibração**, na opção de notificação ou vibração/sensores da atividade. Ao concluir uma tarefa, usamos Expo Haptics para dar o retorno no aparelho. Essa chamada está em [useTasks.js](mobile/src/hooks/useTasks.js). Também acrescentamos o despertador por horário, com som e vibração no APK Android.
+
+### API própria e organização do código
+
+Nossa API Node.js está na pasta `api`, no mesmo repositório do aplicativo. Ela oferece o CRUD completo de tarefas e separa [routes](api/src/routes/), [controllers](api/src/controllers/), [services](api/src/services/) e [middleware](api/src/middleware/). Os endpoints de login e de tarefas são consumidos pelo aplicativo React Native.
+
+Na organização do código, usamos nomes relacionados às funções de cada parte, separamos responsabilidades e reutilizamos o formulário de tarefas. Tratamos falhas tanto na API quanto nas telas, com validações e mensagens para quem está usando o aplicativo.
+
+### Documentação e apresentação
+
+Este README reúne o nome do aplicativo, o problema, a solução proposta, a justificativa pessoal, as tecnologias, o DER e as instruções de acesso e execução. Para a apresentação, organizamos o conteúdo em problema, solução, utilidade, dados e demonstração do aplicativo com a API funcionando. Todos os integrantes devem participar da apresentação.
+
 ## Como o projeto funciona
 
 O aplicativo envia as requisições para nossa API Express no Render. A API valida os dados e a autenticação, executa as consultas no PostgreSQL do Supabase e devolve a resposta ao aplicativo. A consulta de frases é feita diretamente pelo aplicativo à ZenQuotes.
@@ -274,6 +305,8 @@ Essa reserva precisa da rede configurada para o endereço esperado pelo APK loca
 ## Versionamento
 
 Organizamos o desenvolvimento em branches de funcionalidades e correções antes de integrar as alterações à `main`. A branch `main` contém a versão atual do projeto.
+
+Versionamos o aplicativo e a API no mesmo repositório GitHub, com commits descritivos. Como o repositório é privado, o acesso do professor deve ser concedido por convite ao usuário **`leofmds`**, conforme a orientação de entrega.
 
 - `apk-web-v1.1.0`: código utilizado na compilação do APK com a API publicada.
 - `apresentacao-local-v1`: versão local preservada como contingência.
